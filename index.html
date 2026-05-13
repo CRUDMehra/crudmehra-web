@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CRUD Mehra — Senior Mobile App Developer specializing in Android, iOS, Flutter & Kotlin Multiplatform with 7+ years of experience.">
+  <meta property="og:title" content="CRUD Mehra — Mobile App Developer">
+  <meta property="og:description" content="Senior Software Engineer with 7+ years in Android & iOS development.">
+  <meta property="og:url" content="https://crudmehra.com">
+  <meta property="og:type" content="website">
+  <title>CRUD Mehra — Mobile App Developer</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,200,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 80px;
+      align-items: center;
+    }
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .hero-title .line-2 {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--text-dim);
+      letter-spacing: -0.03em;
+    }
+    .hero-title .accent { color: var(--accent); }
+    .hero-role {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-role::before {
+      content: '//';
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .hero-desc {
+      max-width: 520px;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin-bottom: 44px;
+      font-size: 0.95rem;
+    }
+    .hero-desc em { color: var(--text); font-style: normal; }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    /* Avatar */
+    .hero-avatar {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .avatar-frame {
+      width: 240px; height: 240px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      background: var(--bg-2);
+    }
+    .avatar-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(30%) contrast(1.1);
+    }
+    .avatar-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(0,255,136,0.12));
+    }
+    /* fallback monogram */
+    .avatar-monogram {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-size: 5rem;
+      font-weight: 800;
+      color: var(--accent);
+      background: var(--bg-3);
+      letter-spacing: -0.04em;
+    }
+    .avatar-corner {
+      position: absolute;
+      bottom: -12px; right: -12px;
+      width: 80px; height: 80px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .avatar-corner-2 {
+      position: absolute;
+      top: -12px; left: -12px;
+      width: 40px; height: 40px;
+      border: 1px solid var(--text-dim);
+      border-radius: 4px;
+    }
+    .hero-stats {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .stat {
+      background: var(--bg-2);
+      padding: 16px 18px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--font-head);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .about-heading {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .about-heading span { color: var(--accent); }
+    .about-text {
+      color: var(--text-muted);
+      line-height: 1.9;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+    .about-text em { color: var(--text); font-style: normal; }
+    .certs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      transition: border-color var(--transition);
+    }
+    .cert-item:hover { border-color: var(--accent); }
+    .cert-icon { color: var(--accent); font-size: 1rem; }
+    .cert-name { color: var(--text); }
+    .cert-org { color: var(--text-dim); font-size: 0.72rem; margin-left: auto; }
+
+    /* ─── SKILLS SECTION ─── */
+    .section-heading {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 48px;
+    }
+    .section-heading span { color: var(--accent); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+      .hero-avatar { display: flex; justify-content: center; order: -1; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .avatar-frame { width: 180px; height: 180px; }
+      .hero-stats { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2.6rem; }
+      .hero-stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="dot"></span>
+    CRUD<span style="color:var(--text-muted)">Mehra</span>
+  </a>
+  <div class="nav-toggle" aria-label="Menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="contact.html" class="nav-cta">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-status">
+          <span class="status-dot"></span>
+          Available for work
+        </div>
+        <h1 class="hero-title">
+          <div>CRUD</div>
+          <div class="line-2">MEHRA<span class="accent">.</span></div>
+        </h1>
+        <div class="hero-role">Senior Mobile App Developer</div>
+        <p class="hero-desc">
+          <em>7+ years</em> crafting high-performance Android & iOS applications.
+          Specializing in <em>Kotlin Multiplatform</em>, <em>Flutter</em>, and
+          <em>Android Jetpack</em> — building scalable apps that solve real-world problems.
+        </p>
+        <div class="hero-actions">
+          <a href="portfolio.html" class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            View Work
+          </a>
+          <a href="contact.html" class="btn btn-outline">Contact Me</a>
+        </div>
+
+        <div class="hero-stats" style="margin-top:48px;">
+          <div class="stat">
+            <div class="stat-num">7+</div>
+            <div class="stat-label">Years Exp</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">20+</div>
+            <div class="stat-label">Apps Built</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Certifications</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-avatar">
+        <div style="position:relative; display:inline-block;">
+          <div class="avatar-corner-2"></div>
+          <div class="avatar-frame">
+            <div class="avatar-monogram">CM</div>
+          </div>
+          <div class="avatar-corner"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section style="background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="section-label">About Me</div>
+        <h2 class="about-heading">Building apps <span>people love</span> to use</h2>
+        <p class="about-text">
+          I'm a Senior Software Engineer with <em>6+ years of experience</em> in Android and iOS mobile app development.
+          I specialize in building user-friendly, scalable, and high-performance applications using the latest
+          technologies like <em>Kotlin Multiplatform (KMP/KMM)</em>, Flutter, and Android Jetpack.
+        </p>
+        <p class="about-text">
+          I have hands-on expertise in mobile analytics, front-end development, and cross-platform solutions.
+          Over the years, I have successfully integrated APIs, third-party libraries, payment gateways,
+          and <em>BLE technology</em> into multiple apps.
+        </p>
+        <p class="about-text">
+          I hold a <em>Bachelor's degree in Computer Applications (BCA)</em> from PIMT and believe strongly in
+          writing clean, maintainable code that stands the test of time.
+        </p>
+        <div style="margin-top:32px;">
+          <a href="contact.html" class="btn btn-primary">Let's Work Together</a>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="section-label">Certifications</div>
+        <div class="certs">
+          <div class="cert-item">
+            <span class="cert-icon">◆</span>
+            <span class="cert-name">Android Development</span>
+            <span class="cert-org">Certified</span>
+          </div>
+          <div class="cert-item">
+            <span class="cert-icon">◆</span>
+            <span class="cert-name">iOS Development</span>
+            <span class="cert-org">Certified</span>
+          </div>
+          <div class="cert-item">
+            <span class="cert-icon">◆</span>
+            <span class="cert-name">Kotlin Multiplatform</span>
+            <span class="cert-org">Certified</span>
+          </div>
+          <div class="cert-item">
+            <span class="cert-icon">◆</span>
+            <span class="cert-name">Android Jetpack</span>
+            <span class="cert-org">Certified</span>
+          </div>
+          <div class="cert-item" style="border-color:var(--accent); background: var(--accent-dim);">
+            <span class="cert-icon">◉</span>
+            <span class="cert-name" style="color:var(--accent)">BCA — PIMT</span>
+            <span class="cert-org">Degree</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SKILLS ═══ -->
+<section>
+  <div class="container">
+    <div class="section-label reveal">Technical Skills</div>
+    <h2 class="section-heading reveal">What I <span>work with</span></h2>
+
+    <div class="skills-grid reveal">
+      <div class="skill-card">
+        <div class="skill-label">Languages</div>
+        <div class="skill-items">
+          <span class="tag green">Kotlin</span>
+          <span class="tag green">Java</span>
+          <span class="tag green">Dart (Flutter)</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Platforms & Frameworks</div>
+        <div class="skill-items">
+          <span class="tag blue">Android</span>
+          <span class="tag blue">iOS</span>
+          <span class="tag blue">KMP / KMM</span>
+          <span class="tag blue">Flutter</span>
+          <span class="tag blue">Jetpack</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Architecture</div>
+        <div class="skill-items">
+          <span class="tag">MVVM</span>
+          <span class="tag">MVC</span>
+          <span class="tag">MVP</span>
+          <span class="tag">Clean Arch</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Databases</div>
+        <div class="skill-items">
+          <span class="tag">Room DB</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Firestore</span>
+          <span class="tag">Firebase RT DB</span>
+          <span class="tag">SharedPrefs</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Integrations</div>
+        <div class="skill-items">
+          <span class="tag">Retrofit</span>
+          <span class="tag">GSON</span>
+          <span class="tag">RESTful APIs</span>
+          <span class="tag">Glide</span>
+          <span class="tag">Picasso</span>
+          <span class="tag">Agora</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Services & Tools</div>
+        <div class="skill-items">
+          <span class="tag">Firebase FCM</span>
+          <span class="tag">Crashlytics</span>
+          <span class="tag">Analytics</span>
+          <span class="tag">AdMob</span>
+          <span class="tag">BLE</span>
+          <span class="tag">WebSockets</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Payment Gateways</div>
+        <div class="skill-items">
+          <span class="tag green">Stripe</span>
+          <span class="tag green">In-App Purchases</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Dev Tools</div>
+        <div class="skill-items">
+          <span class="tag">Android Studio</span>
+          <span class="tag">IntelliJ</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">Bitbucket</span>
+          <span class="tag">Jira</span>
+          <span class="tag">Slack</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-label">Social APIs</div>
+        <div class="skill-items">
+          <span class="tag">Facebook</span>
+          <span class="tag">Instagram</span>
+          <span class="tag">Google</span>
+          <span class="tag">LinkedIn</span>
+          <span class="tag">Spotify</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA STRIP ═══ -->
+<section style="padding: 80px 48px; background: var(--bg-2); border-top:1px solid var(--border);">
+  <div class="container" style="text-align:center;">
+    <div class="reveal">
+      <div class="section-label" style="justify-content:center; margin-bottom:16px;">Ready to build?</div>
+      <h2 style="font-family:var(--font-head); font-size:clamp(2rem,4vw,3rem); font-weight:800; letter-spacing:-0.03em; margin-bottom:24px;">
+        Let's ship something <span style="color:var(--accent)">great.</span>
+      </h2>
+      <p style="color:var(--text-muted); margin-bottom:36px; max-width:480px; margin-inline:auto; font-size:0.95rem;">
+        Whether it's a greenfield app or scaling an existing product — I'm here to make it happen.
+      </p>
+      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+        <a href="contact.html" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Get in Touch
+        </a>
+        <a href="portfolio.html" class="btn btn-outline">See My Work</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-copy">
+    © 2025 <span>CRUD Mehra</span>. Built with precision.
+  </div>
+  <div class="social-row">
+    <a href="https://www.linkedin.com/in/princemehra/" target="_blank" title="LinkedIn">in</a>
+    <a href="https://github.com/CRUDMehra" target="_blank" title="GitHub">gh</a>
+    <a href="https://twitter.com/CRUD_Mehra" target="_blank" title="Twitter">𝕏</a>
+    <a href="https://stackoverflow.com/users/9080167/prince-mehra" target="_blank" title="Stack Overflow">so</a>
+    <a href="https://www.instagram.com/crud_mehra/" target="_blank" title="Instagram">ig</a>
+    <a href="https://g.dev/PrinceMehra" target="_blank" title="Google Dev">gd</a>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

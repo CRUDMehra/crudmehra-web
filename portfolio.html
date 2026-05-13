@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CRUD Mehra's Portfolio — Android & iOS projects, open source code and apps.">
+  <title>Portfolio — CRUD Mehra</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ─── HERO ─── */
+    .page-hero {
+      padding: 160px 48px 80px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-hero-label { margin-bottom: 16px; }
+    .page-hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p {
+      color: var(--text-muted);
+      max-width: 520px;
+      font-size: 0.95rem;
+      line-height: 1.9;
+    }
+
+    /* ─── FILTER TABS ─── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      padding: 32px 48px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .filter-btn {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ─── PROJECTS GRID ─── */
+    .projects-section { padding: 64px 48px; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2px;
+    }
+    .project-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-dim) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .project-card:hover::before { opacity: 1; }
+    .project-num {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+    }
+    .project-icon {
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1.4rem;
+    }
+    .project-title {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .project-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      flex: 1;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .project-footer {
+      display: flex;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .project-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color var(--transition);
+    }
+    .project-link:hover { color: var(--accent); }
+    .project-link svg { transition: transform var(--transition); }
+    .project-link:hover svg { transform: translate(2px, -2px); }
+
+    /* placeholder card */
+    .project-card.placeholder {
+      border-style: dashed;
+      cursor: default;
+    }
+    .project-card.placeholder:hover {
+      transform: none;
+      border-color: var(--border);
+      box-shadow: none;
+    }
+    .project-card.placeholder::before { display: none; }
+    .placeholder-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 200px;
+      gap: 12px;
+    }
+    .placeholder-inner svg { color: var(--text-dim); }
+    .placeholder-inner p { font-size: 0.82rem; color: var(--text-dim); }
+
+    /* ─── OPEN SOURCE ─── */
+    .oss-section {
+      padding: 64px 48px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .oss-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .oss-card {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      transition: all var(--transition);
+    }
+    .oss-card:hover { border-color: var(--accent); background: var(--bg-2); }
+    .oss-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .oss-name {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .oss-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .oss-link {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .oss-link:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 140px 24px 60px; }
+      .filter-bar { padding: 24px 24px; }
+      .projects-section { padding: 40px 24px; }
+      .oss-section { padding: 40px 24px; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="dot"></span>
+    CRUD<span style="color:var(--text-muted)">Mehra</span>
+  </a>
+  <div class="nav-toggle" aria-label="Menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="portfolio.html" class="active">Portfolio</a></li>
+    <li><a href="contact.html" class="nav-cta">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ PAGE HERO ═══ -->
+<div class="page-hero">
+  <div class="container">
+    <div class="section-label page-hero-label">My Work</div>
+    <h1>Selected <span>Projects</span></h1>
+    <p>A mix of open-source code, real-world Android & iOS apps, and technical explorations. More projects coming soon.</p>
+  </div>
+</div>
+
+<!-- ═══ FILTER ═══ -->
+<div class="filter-bar">
+  <button class="filter-btn active">All</button>
+  <button class="filter-btn">Android</button>
+  <button class="filter-btn">iOS</button>
+  <button class="filter-btn">KMP / Flutter</button>
+  <button class="filter-btn">Open Source</button>
+  <button class="filter-btn">Libraries</button>
+</div>
+
+<!-- ═══ PROJECTS ═══ -->
+<div class="projects-section">
+  <div class="projects-grid">
+
+    <!-- Project 1: Room DB -->
+    <div class="project-card reveal">
+      <div class="project-num">001</div>
+      <div class="project-icon">🗄️</div>
+      <div class="project-title">Room Database Sample</div>
+      <p class="project-desc">
+        A production-ready Android app demonstrating Room with Kotlin Coroutines, LiveData, and Flow.
+        Clean architecture with MVVM — perfect reference for local data persistence.
+      </p>
+      <div class="project-tags">
+        <span class="tag green">Kotlin</span>
+        <span class="tag">Room DB</span>
+        <span class="tag">MVVM</span>
+        <span class="tag">LiveData</span>
+        <span class="tag">Coroutines</span>
+      </div>
+      <div class="project-footer">
+        <a href="https://github.com/CRUDMehra/SampleRoomDB/tree/master" target="_blank" class="project-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          GitHub
+        </a>
+        <span class="tag green" style="font-size:0.7rem;">Open Source</span>
+      </div>
+    </div>
+
+    <!-- Project 2: XTEA -->
+    <div class="project-card reveal">
+      <div class="project-num">002</div>
+      <div class="project-icon">🔐</div>
+      <div class="project-title">XTEA Algorithm in Kotlin</div>
+      <p class="project-desc">
+        Implementation of the eXtended TEA symmetric block cipher in Kotlin. Operates on 64-bit blocks
+        with a 128-bit key over 64 rounds — ideal for embedded and resource-constrained environments.
+      </p>
+      <div class="project-tags">
+        <span class="tag green">Kotlin</span>
+        <span class="tag">Cryptography</span>
+        <span class="tag">Algorithm</span>
+        <span class="tag">Security</span>
+      </div>
+      <div class="project-footer">
+        <a href="https://github.com/CRUDMehra/XTEA-Kotlin-Algorithm.git" target="_blank" class="project-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          GitHub
+        </a>
+        <span class="tag green" style="font-size:0.7rem;">Open Source</span>
+      </div>
+    </div>
+
+    <!-- Placeholders -->
+    <div class="project-card placeholder reveal">
+      <div class="placeholder-inner">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text-dim);">Coming Soon</div>
+        <p>More projects will be added here soon. Stay tuned!</p>
+      </div>
+    </div>
+
+    <div class="project-card placeholder reveal">
+      <div class="placeholder-inner">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text-dim);">App Showcase</div>
+        <p>Play Store apps coming. Update me with your app details!</p>
+      </div>
+    </div>
+
+    <div class="project-card placeholder reveal">
+      <div class="placeholder-inner">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text-dim);">KMP Project</div>
+        <p>Kotlin Multiplatform showcase — update with your KMP work!</p>
+      </div>
+    </div>
+
+    <div class="project-card placeholder reveal">
+      <div class="placeholder-inner">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text-dim);">Your Next Project</div>
+        <p>Add more projects by editing portfolio.html anytime.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ OPEN SOURCE ═══ -->
+<div class="oss-section">
+  <div class="container">
+    <div class="section-label reveal">GitHub</div>
+    <h2 style="font-family:var(--font-head);font-size:2rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:32px;" class="reveal">
+      Open Source <span style="color:var(--accent)">Contributions</span>
+    </h2>
+    <div class="oss-grid">
+      <div class="oss-card reveal">
+        <div class="oss-card-head">
+          <div class="oss-name">SampleRoomDB</div>
+          <span class="tag green" style="font-size:0.7rem;">Kotlin</span>
+        </div>
+        <p class="oss-desc">Android Room Database with Kotlin Coroutines, LiveData & MVVM architecture. A clean, minimal reference implementation.</p>
+        <a href="https://github.com/CRUDMehra/SampleRoomDB/tree/master" target="_blank" class="oss-link">
+          View Repository
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+      <div class="oss-card reveal">
+        <div class="oss-card-head">
+          <div class="oss-name">XTEA-Kotlin-Algorithm</div>
+          <span class="tag green" style="font-size:0.7rem;">Kotlin</span>
+        </div>
+        <p class="oss-desc">Implementation of the eXtended Tiny Encryption Algorithm (XTEA) in Kotlin. Symmetric block cipher with 64 rounds for strong data security.</p>
+        <a href="https://github.com/CRUDMehra/XTEA-Kotlin-Algorithm.git" target="_blank" class="oss-link">
+          View Repository
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+      <div class="oss-card reveal" style="border-style:dashed;">
+        <div class="oss-card-head">
+          <div class="oss-name" style="color:var(--text-dim)">More on GitHub</div>
+        </div>
+        <p class="oss-desc" style="color:var(--text-dim);">Visit my GitHub profile to see all repositories, contributions, and activity.</p>
+        <a href="https://github.com/CRUDMehra" target="_blank" class="oss-link">
+          github.com/CRUDMehra
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-copy">© 2025 <span>CRUD Mehra</span>. Built with precision.</div>
+  <div class="social-row">
+    <a href="https://www.linkedin.com/in/princemehra/" target="_blank" title="LinkedIn">in</a>
+    <a href="https://github.com/CRUDMehra" target="_blank" title="GitHub">gh</a>
+    <a href="https://twitter.com/CRUD_Mehra" target="_blank" title="Twitter">𝕏</a>
+    <a href="https://stackoverflow.com/users/9080167/prince-mehra" target="_blank" title="Stack Overflow">so</a>
+    <a href="https://www.instagram.com/crud_mehra/" target="_blank" title="Instagram">ig</a>
+    <a href="https://g.dev/PrinceMehra" target="_blank" title="Google Dev">gd</a>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  // Filter buttons (visual only for now)
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
